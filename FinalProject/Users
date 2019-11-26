@@ -1,0 +1,51 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package coe528.project;
+
+/**
+ *
+ * @author jjmar
+ */
+public abstract class Users {
+    
+    String username;
+    String password;
+    String role; 
+   
+   
+    public Users(String n, String p){
+        username = n;   
+        password = p;
+    }
+    
+    void setUsername(String n){
+        username = n;
+    }
+    
+    String getUsername(){
+        return username;
+    }
+    
+    void setPassword(String p){
+        password = p;
+    }
+    
+    String getPassword(){
+        return password;
+    }
+    
+    void setRole(String r){
+        role = r;
+    }
+    
+    String getRole(){
+        return role;
+    }
+   
+    
+    abstract boolean login(String n, String p, String r);
+    abstract boolean logout();
+}
