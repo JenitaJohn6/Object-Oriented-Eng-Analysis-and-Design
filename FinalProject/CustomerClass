@@ -1,0 +1,122 @@
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package coe528.project;
+
+/**
+ *
+ * @author jjmar
+ */
+public class Customer extends Users {
+    
+    double Balance;
+    double Total;
+    CustomerLevel level;
+    BankAccountApp app;
+    
+     public Customer(String n, String p){
+        super(n,p);
+        Balance = 100; 
+    }
+     
+     public double depositMoney(double d){
+        Balance = Balance +  d;   
+        return Balance;}
+    
+    public double withdrawMoney(double d){
+        Balance = Balance - d;
+        return Balance; }
+     
+     public void OnlinePurchase(double d){
+         
+         if(d<50){
+            System.out.println("Sorry,the online purchase must be of 50 dollars or more");
+         }
+         else{
+         if(getBalance()< 10000){
+             CustomerLevel a = new Silver();
+             Total= a.applydiscount(d);
+         }
+         
+          if(getBalance()> 10000 && getBalance()< 20000){
+             CustomerLevel a = new Gold();
+             Total =a.applydiscount(d);
+         }
+          
+          if(getBalance()> 20000){
+             CustomerLevel a = new Platinum();
+             Total = a.applydiscount(d);
+             UpdateBalance(Total);
+         }
+       }
+      
+     }
+     
+     
+     public CustomerLevel getCustomerLevel(){
+        if (getBalance()< 10000){
+          level = new Silver();
+        }
+        if (getBalance()> 10000 && getBalance()< 20000){
+          level = new Gold();
+        }
+        if (getBalance()> 20000){
+          level = new Platinum();
+        }
+    return level;}
+     
+     
+     public String printCustomerLevel(CustomerLevel c){
+        if (c instanceof Silver){
+          level = new Silver();
+        }
+        if (c instanceof Gold){
+          level = new Gold();
+        }
+        if (c instanceof Platinum){
+          level = new Platinum();
+        }
+        
+    return level.toString();} 
+     
+    //Method to update Balance after an online purchase 
+    double UpdateBalance(double d){
+    Balance = Balance - d;    
+    return Balance; 
+    }
+     
+     
+     public double getBalance(){         
+     return Balance;}
+     
+     
+      @Override
+   boolean login(String n, String p, String r){
+       
+       if (r.equals("customer")){
+         if(username.equals(n) && password.equals(p)){
+         System.out.println("Now you are logged into the system (Customer)");
+         return true;
+         }
+         else{
+         System.out.println("Please check your username or password and try again!");
+         }
+       }
+       
+       return false;
+   }
+    @Override
+   boolean logout(){
+       System.out.println("Logged out!(Customer)");
+   return true;
+   }
+   
+    @Override
+   public String toString(){
+    return ("Name:" + username + "\n" + "Balance:" + Balance + "\n" + "Customer Level:" + printCustomerLevel(getCustomerLevel()) ) ;   
+    }
+   
+}
