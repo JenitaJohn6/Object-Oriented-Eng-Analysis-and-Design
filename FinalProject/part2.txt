@@ -1,0 +1,171 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package coe528.project;
+import java.util.ArrayList;
+
+/**
+ *
+ * @author jjmar
+ */
+public class Manager extends Users {
+   // Overview:Manager is a mutable class used to create 
+    //         and delete customers and BankAccount.
+    //
+    // The abstraction function is:
+    // AF(C)= 
+    // a list of Customers{C.customers.get(i)}, for 0<=i<customers.size();}
+    // AF(s)=
+    // a list of BankAccounts{s.accounts.get(i)}, for 0<=i<accounts.size();}
+    //
+    // The rep invariant is:
+    // c.customers != null &&
+    // for all integers i, c.customers[i] is a Customer &&
+    // for all intergers i,j,
+    // (0 < = i < j < customers.size())
+    //  c.customers.[i].username != c.customers.[j].username 
+    
+    
+    // the rep: customers and bankaccounts 
+    ArrayList<Customer> customers = new ArrayList();   
+    ArrayList<BankAccount> accounts = new ArrayList();
+    static int i = 0;
+ 
+    
+    //constructor 
+    public Manager(String n, String p){
+        
+        // REQUIRES: the username and password of type String of 
+        //           the Manager while creating it 
+        // EFFECTS: Creates a new Manager object 
+        
+        super(n,p);
+    }
+    
+    public void addCustomer(Customer c){
+        
+        //REQUIRES: The customer object to be added
+        //EFFECTS: A new customer is added to the arraylist
+        //MODIFIES: The customers arraylist is modified; new object is added
+         
+        customers.add(i,c);
+        i++;
+    }
+    
+    public void deleteCustomer(Customer c){
+        
+        //REQUIRES: The customer object to be deleted 
+        //EFFECTS:  A customer from the customers array is deleted 
+        //MODIFIES: The customers arraylist is modified; new object is deleted
+        
+        for(int j = 0; j < customers.size(); j++){
+            if (c.equals(customers.get(j))){
+               customers.remove(c);
+               deleteAccount(c);
+            }
+        }    
+    }
+    
+    public void createAccount(Customer c, String number){
+        
+        //REQUIRES: The customer object and the AccountNumber while
+        //          customer cannot have an existing username
+        //EFFECTS:  A new account is created and 
+        //          added to accounts array 
+        //MODIFIES: The balance of the customer and the accounts array is modified 
+        
+        for( int i = 0; i < accounts.size(); i++){
+            if(c.username.equals(accounts.get(i).customer.username)){
+              System.out.println("username not available");      
+            }else{
+             BankAccount  one = new BankAccount(c,number);          // creates a bank account 
+             accounts.add(one);                                  // adds it to array of accounts 
+            }
+        }
+        
+       
+        
+    }   
+    public void deleteAccount(Customer c){
+        
+        //REQUIRES: The customer object that needs to be deleted  
+        //EFFECTS:  The accounted is deleted and removed from the accounts array
+        //MODIFIES: The accounts array
+        
+        for(int n = 0; n < accounts.size(); n++){
+         if(c.equals(accounts.get(n).customer)){
+          accounts.remove(c);    
+         }       
+        }
+    }
+      
+    
+    public void searchFile(String c){
+        
+        //REQUIRES: The Customer object that needs to be searched 
+        //          and two users cannot have the same username
+        //EFFECTS:  The information of the customer including AccountNumber,Name, 
+        //          Balance and Level is printed 
+        
+       for(int n = 0; n < accounts.size(); n++){
+         if(c.equals(accounts.get(n).customer.username)){
+         System.out.println("*************************");
+         System.out.println("Search Results: " + "\n" + accounts.get(n).toString()+ "\n" + c.toString());
+         System.out.println("**************************");
+         }
+    }}
+    
+    
+     public boolean repOk(){
+        //EFFECTS: Returns true if the invariant holds 
+        //         for this object; otherwise return false
+        //         That is, there is no duplicate usernames, it is 
+        //         assumed that no two users can have the same username 
+        for(int m = 0; m < accounts.size(); m++){
+        String x = accounts.get(m).customer.username;
+            for(int u = m+1; u < accounts.size(); u++){
+                if(x.equals(accounts.get(u).customer.username)){
+                return false;}
+            }
+            
+        }
+        
+    return true;}
+     
+     // uncomment the tester at the bottom 
+    @Override
+     public String toString(){
+         
+        //EFFECTS: Returns a string customer information.
+        //Implements the Abstraction Function
+
+        String s = "";    
+        for(int r = 0; r < accounts.size(); r++){  
+        s = s + "\n" + accounts.get(r).toString();
+    }
+    return s;
+    }
+    
+   @Override
+   boolean login(String u, String p, String r){
+       
+       if(r.equals("manager")){
+           if(u.equals(username) && (p.equals(password))){
+           System.out.println("Now you are logged into the system(Manager)");
+           return true;
+           }
+           else{
+           System.out.println("Please check your username or password and try again.");
+           return false;
+           }
+       }
+    return false;  
+   }
+    @Override
+   boolean logout(){
+     System.out.println("Logged out!(Manager)");
+     return true;
+   }
+}
