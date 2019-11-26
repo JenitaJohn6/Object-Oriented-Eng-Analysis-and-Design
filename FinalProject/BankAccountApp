@@ -1,0 +1,723 @@
+
+package coe528.project;
+
+import java.awt.event.MouseEvent;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import java.util.ArrayList;
+import javax.script.ScriptEngineManager;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
+public class BankAccountApp extends Application{
+    
+    private Manager manager;
+    private Customer customer;
+    private BankAccount account;
+    private TextField projectNameInput;
+    Files info;
+    
+    
+    ArrayList<Files> file = new ArrayList();  
+    
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        
+     /*********************************INITIAL PAGE**********************************************/
+        
+        primaryStage.setTitle("JJ Bank Account");
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(5, 5, 5, 5));
+
+        Text scenetitle2 = new Text("Choose Your Role");
+        scenetitle2.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+        scenetitle2.setFill(Color.ALICEBLUE);
+        grid.add(scenetitle2, 0, 0, 2, 1);  // col, row, colspan, rowspan
+        
+        Button m = new Button("Manager");
+        VBox hbBtn = new VBox(10);
+        hbBtn.setAlignment(Pos.CENTER);
+        hbBtn.getChildren().add(m);
+        grid.add(hbBtn, 1, 1);
+        
+        Button c = new Button("Customer");
+        VBox hbBtn2 = new VBox(10);
+        hbBtn2.setAlignment(Pos.CENTER);
+        hbBtn2.getChildren().add(c);
+        grid.add(hbBtn2, 1, 2);
+        
+        String style = "-fx-background-color: rgba(34, 49, 63, 1);";
+        grid.setStyle(style);
+         
+        Scene scene1 = new Scene(grid, 300, 300);
+        primaryStage.setScene(scene1);
+        primaryStage.show();
+        
+        /*********************************END OF INITIAL PAGE***************************************/
+        
+        /*********************************MANAGER SCENES********************************************/
+        
+        // Scene 411: Create Account Scene     
+        
+        GridPane createAccount = new GridPane();
+        createAccount.setAlignment(Pos.CENTER);
+        createAccount.setHgap(10);
+        createAccount.setVgap(10);
+        createAccount.setPadding(new Insets(5, 5, 5, 5));
+
+        Text Title1 = new Text("Enter Customer Information_________________________");
+        Title1.setFont(Font.font("Calibri", FontWeight.NORMAL, 20));
+        Title1.setFill(Color.ALICEBLUE);
+        createAccount.add(Title1,0, 0, 3, 1);
+ 
+        Label name = new Label("Name:");
+        name.setTextFill(Color.web("#ffffff"));
+        createAccount.add(name,0,1);
+         
+        TextField nameBox = new TextField();
+        createAccount.add(nameBox, 1,1);
+
+        Label pass = new Label("Password:");
+        pass.setTextFill(Color.web("#ffffff"));
+        createAccount.add(pass,0,2);
+         
+        PasswordField passBox = new PasswordField();
+        createAccount.add(passBox, 1,2);
+
+        Text Title2 = new Text("Enter Account Information__________________________");
+        Title2.setFont(Font.font("Calibri", FontWeight.NORMAL, 20));
+        Title2.setFill(Color.ALICEBLUE);
+        createAccount.add(Title2,0, 0, 3, 12);
+
+        Label a = new Label("Account Number:");
+        a.setTextFill(Color.web("#ffffff"));
+        createAccount.add(a,0,8);
+         
+        TextField accountBox = new TextField();
+        createAccount.add(accountBox, 1,8);
+        
+         // submit button
+         Button newBN = new Button("Submit");
+         HBox hnewBN = new HBox(10); 
+         hnewBN.setAlignment(Pos.BOTTOM_CENTER);
+         hnewBN.getChildren().add(newBN);
+         createAccount.add(hnewBN,1,9);          
+
+        // back button
+         Button bck = new Button("Back");
+         HBox hbck = new HBox(10); 
+         hbck.setAlignment(Pos.BOTTOM_RIGHT);
+         hbck.getChildren().add(bck);
+         createAccount.add(hbck,2,9);
+         
+         final Text successprompt = new Text();
+         createAccount.add(successprompt,1,10); 
+         
+         final Text failprompt = new Text();
+         createAccount.add(failprompt,1,12);
+         
+          createAccount.setStyle(style);
+         
+            
+         Scene scene411 = new Scene(createAccount,600,600);
+         
+         EventHandler<ActionEvent> events = (ActionEvent event1) -> {    
+            
+                    customer = new Customer(nameBox.getText(), passBox.getText());
+                    account = new BankAccount(customer,accountBox.getText());
+                    info = new Files(customer,account);
+                    file.add(info);
+                    successprompt.setFill(Color.ALICEBLUE);
+                    successprompt.setText("Successfully created an account for" + " " +nameBox.getText());
+                    nameBox.clear();
+                    passBox.clear();
+                    accountBox.clear();
+                    
+     
+        };
+         
+         newBN.setOnAction(events);
+    
+           
+        // Scene 411: End of Create Account Scene
+         
+        // Scene 412: Delete Account Scene 
+        
+        GridPane deleteAccount = new GridPane();
+        deleteAccount.setAlignment(Pos.CENTER);
+        deleteAccount.setHgap(10);
+        deleteAccount.setVgap(10);
+        deleteAccount.setPadding(new Insets(5, 5, 5, 5));
+
+        Text Title1da = new Text("Delete Account_________________________");
+        Title1da.setFont(Font.font("Calibri", FontWeight.NORMAL, 20));
+        Title1da.setFill(Color.ALICEBLUE);
+        deleteAccount.add(Title1da,0, 0, 3, 1);
+ 
+        Label nm = new Label("Name:");
+        nm.setTextFill(Color.web("#ffffff"));
+        deleteAccount.add(nm,0,3);
+        
+        TextField nmField = new TextField();
+        deleteAccount.add(nmField, 1, 3);
+
+         Button done = new Button("Submit");
+         HBox hdone = new HBox(10); 
+         hdone.setAlignment(Pos.BOTTOM_CENTER);
+         hdone.getChildren().add(done);
+         deleteAccount.add(hdone,1,9);   
+         
+         Button cbck = new Button("Back");
+         HBox hcbck = new HBox(10); 
+         hcbck.setAlignment(Pos.BOTTOM_RIGHT);
+         hcbck.getChildren().add(cbck);
+         deleteAccount.add(hcbck,2,9);  
+         
+         deleteAccount.setStyle(style);
+
+	 Scene scene412 = new Scene(deleteAccount,500,500);
+         done.setOnAction(e->primaryStage.setScene(scene1));
+         
+          final Text deleteprompt = new Text();
+          deleteAccount.add(deleteprompt,1,10); 
+    
+         EventHandler<ActionEvent> eventdelete = (ActionEvent eventd) ->{
+             
+             for(int i =0 ; i < file.size(); i++){
+                 if(nmField.getText().equals(file.get(i).c.username)){
+                     file.remove(i);
+                     deleteprompt.setFill(Color.ALICEBLUE);
+                     deleteprompt.setText("Account successfully deleted!!");
+                     nmField.clear();
+                 }
+             }
+             
+         };
+         
+         done.setOnAction(eventdelete);
+    
+         
+        //Scene 412: End of Delete Account Scene
+        //Scene 414: Search Results Page 
+        
+        GridPane searchFile = new GridPane();
+        searchFile.setAlignment(Pos.CENTER);
+        searchFile.setHgap(10);
+        searchFile.setVgap(10);
+        searchFile.setPadding(new Insets(5, 5, 5, 5));
+
+        Text Title13 = new Text("Search Account_________________________");
+        Title13.setFill(Color.ALICEBLUE);
+        Title13.setFont(Font.font("Calibri", FontWeight.NORMAL, 20));
+        
+        searchFile.add(Title13,0, 0, 3, 1);
+ 
+        Label um = new Label("Customer Name:");
+        um.setTextFill(Color.web("#ffffff"));
+        searchFile.add(um,1,2);
+        
+        TextField umField = new TextField();
+        searchFile.add(umField, 2, 2);
+
+         Button dn = new Button("Submit");
+         HBox hdn = new HBox(10); 
+         hdn.setAlignment(Pos.BOTTOM_CENTER);
+         hdn.getChildren().add(dn);
+         searchFile.add(hdn,1,9);      
+         
+         Button dbck = new Button("Back");
+         HBox hdbck = new HBox(10); 
+         hdbck.setAlignment(Pos.BASELINE_LEFT);
+         hdbck.getChildren().add(dbck);
+         searchFile.add(hdbck,1,14);  
+          
+        searchFile.setStyle(style);
+
+	 Scene scene413 = new Scene(searchFile,500,500);
+          
+         EventHandler<ActionEvent> eventsearch = (ActionEvent eventsh) ->{
+            for(int i = 0; i < file.size(); i++){
+                if(umField.getText().equals(file.get(i).c.username)){
+                    System.out.println("Account Number: " + file.get(i).a.accountNumber);
+                    System.out.println("Name: " + file.get(i).c.username);
+                    System.out.println("Balance: " + file.get(i).c.getBalance());
+                }
+            } 
+             
+             
+             
+         };
+       
+        dn.setOnAction(eventsearch);  
+       // add action
+         
+         
+        //Scene 414: End of Search Results Page 
+        // Output the results
+        // End of Scene 4
+        
+        // Scene 3 for Manager after login  
+        // This is the scene for manager to create and delete customer after login
+
+        GridPane managerscreen = new GridPane();
+        managerscreen.setAlignment(Pos.CENTER);
+        managerscreen.setHgap(10);
+        managerscreen.setVgap(10);
+        managerscreen.setPadding(new Insets(25, 25, 25, 25));
+
+        Text scenetitle = new Text("Bank Application");
+        scenetitle.setFill(Color.ALICEBLUE);
+        scenetitle.setFont(Font.font("Calibri", FontWeight.NORMAL, 20));
+        
+        managerscreen.add(scenetitle, 0, 0, 2, 1);
+        
+        Button cA = new Button("Create Account");
+        VBox hbBtnc = new VBox(10); // 10 is the spacing 
+        hbBtnc.setAlignment(Pos.CENTER);
+        hbBtnc.getChildren().add(cA);
+        managerscreen.add(hbBtnc, 1, 1); // colmn = 1 row =1
+        
+        Button d = new Button("Delete Account");
+        VBox hbBtnd = new VBox(10);
+        hbBtnd.setAlignment(Pos.CENTER);
+        hbBtnd.getChildren().add(d);
+        managerscreen.add(hbBtnd, 1, 2); // colmn = 1 row =2
+
+        Button vf = new Button("Search Customer");
+        VBox hbBvf = new VBox(10);
+        hbBvf.setAlignment(Pos.CENTER);
+        hbBvf.getChildren().add(vf);
+        managerscreen.add(hbBvf, 1, 3); // colmn = 1 row =2
+        
+        Button l = new Button("Sign out");
+        VBox hbBtnl = new VBox(10);
+        hbBtnl.setAlignment(Pos.BASELINE_RIGHT);
+        hbBtnl.getChildren().add(l);
+        managerscreen.add(hbBtnl, 1, 4);  // colmn = 1 row =3
+        
+        managerscreen.setStyle(style);
+        Scene scene31 = new Scene(managerscreen,500,500);
+        l.setOnAction(e-> primaryStage.setScene(scene1));
+        cA.setOnAction(e-> primaryStage.setScene(scene411));
+        bck.setOnAction(e->primaryStage.setScene(scene31));
+        d.setOnAction(e->primaryStage.setScene(scene412));
+        vf.setOnAction(e->primaryStage.setScene(scene413));
+        
+        // End of Manager scene 31 
+        // Go to next  scene
+        //Scene21 login page  manager
+        //Scene(Parent root, double width, double height) Creates a scene for a specific root Node with a specific size.
+        
+        GridPane grid21 = new GridPane();
+        grid21.setAlignment(Pos.CENTER);
+        grid21.setHgap(10);
+        grid21.setVgap(10);
+        grid21.setPadding(new Insets(25, 25, 25, 25));
+        
+        Text scene21title = new Text("JJ Online Bank"); 
+        scene21title.setFont(Font.font("Calibri", FontWeight.NORMAL, 20));
+        scene21title.setFill(Color.ALICEBLUE);
+        grid21.add(scene21title, 0, 0, 2, 1);
+
+        Label userName = new Label("User Name:");
+        userName.setTextFill(Color.web("#ffffff"));
+        grid21.add(userName, 0, 1);
+
+        TextField userTextField = new TextField();
+        grid21.add(userTextField, 1, 1);
+
+        Label pw = new Label("Password:");
+        pw.setTextFill(Color.web("#ffffff"));
+        grid21.add(pw, 0, 2);
+
+        PasswordField pwBox = new PasswordField();
+        grid21.add(pwBox, 1, 2);
+        
+        Button btns1 = new Button("Sign in");
+        HBox hbBtns1 = new HBox(10);
+        hbBtns1.setAlignment(Pos.BOTTOM_CENTER);
+        hbBtns1.getChildren().add(btns1);
+        grid21.add(hbBtns1, 1, 4);
+        
+        Button mback = new Button("Back");
+        HBox hmback = new HBox(5);
+        hmback.setAlignment(Pos.BASELINE_LEFT);
+        hmback.getChildren().add(mback);
+        grid21.add(hmback, 0, 7);
+        
+        //End of Scene21 
+        grid21.setStyle(style);
+        Scene scene21 = new Scene(grid21,500,500);
+        m.setOnAction(e-> primaryStage.setScene(scene21));        // The scene21 will be if Manger was chosen
+        mback.setOnAction(e-> primaryStage.setScene(scene1));     // The initial page will be displayed when back is chosen
+        cbck.setOnAction(e->primaryStage.setScene(scene31));
+        dbck.setOnAction(e->primaryStage.setScene(scene31));
+        final Text prompt1 = new Text();
+        grid21.add(prompt1, 1, 5);
+        // create sign in condition for button btns1 that takes to Scene31
+        btns1.setOnAction(new EventHandler<ActionEvent>(){
+
+            @Override
+            public void handle(ActionEvent event) {
+                if(userTextField.getText().equals("admin")){
+                   if(pwBox.getText().equals("admin")){
+                   btns1.setOnAction(e->primaryStage.setScene(scene31) );    
+                   }else{
+                   prompt1.setFill(Color.ALICEBLUE);
+                   prompt1.setText("Username or Password incorrect, please try again!");
+                   }
+                }
+            
+            } 
+        });
+        
+        
+        // End of Manager Scenes  
+        /******************************************Customer Scenes**********************************************************/
+        // Scene 421: Deposit Money
+        GridPane depositMoney = new GridPane();
+        depositMoney.setAlignment(Pos.CENTER);
+        depositMoney.setHgap(10);
+        depositMoney.setVgap(10);
+        depositMoney.setPadding(new Insets(5, 5, 5, 5));
+
+        Text Titledm = new Text("My Account: Deposit_________________________");
+        Titledm.setFont(Font.font("Calibri", FontWeight.NORMAL, 20));
+        Titledm.setFill(Color.ALICEBLUE);
+        depositMoney.add(Titledm,0, 0, 3, 1);
+ 
+        Label amount = new Label("Enter Amount:");
+        amount.setTextFill(Color.web("#ffffff"));
+        depositMoney.add(amount,0,1);
+         
+        TextField amountBox = new TextField();
+        depositMoney.add(amountBox, 1,1);
+        
+        Button dmsub = new Button("Submit");
+        HBox hdmsub = new HBox(5);
+        hdmsub.setAlignment(Pos.CENTER);
+        hdmsub.getChildren().add(dmsub);
+        depositMoney.add(dmsub, 1, 4);
+        
+        Button getback = new Button("Back");
+        HBox hgetback = new HBox(5);
+        hgetback.setAlignment(Pos.BASELINE_LEFT);
+        hgetback.getChildren().add(getback);
+        depositMoney.add(getback,0,6);        
+        
+        
+        final Text deposited = new Text();
+        depositMoney.add(deposited, 1, 6);
+        
+        depositMoney.setStyle(style);
+        Scene scene421 = new Scene(depositMoney,600,500);
+        
+        
+        dmsub.setOnAction(new EventHandler<ActionEvent>(){
+            
+            @Override
+            public void handle(ActionEvent event){
+               double num = Double.parseDouble(amountBox.getText());
+               customer.depositMoney(num);
+               deposited.setText("Successfully deposited:  $" + num );
+               amountBox.clear();
+            }  
+        });
+
+        // End of Scene 421 
+        // Scene 422: Withdraw Money
+        GridPane withdrawMoney = new GridPane();
+        withdrawMoney.setAlignment(Pos.CENTER);
+        withdrawMoney.setHgap(10);
+        withdrawMoney.setVgap(10);
+        withdrawMoney.setPadding(new Insets(5, 5, 5, 5));
+
+        Text Titledw = new Text("My Account:Withdraw_________________________");
+        Titledw.setFont(Font.font("Calibri", FontWeight.NORMAL, 20));
+        Titledw.setFill(Color.ALICEBLUE);
+        withdrawMoney.add(Titledw,0, 0, 3, 1);
+ 
+        Label wamount = new Label("Enter Amount:");
+        wamount.setTextFill(Color.web("#ffffff"));
+        withdrawMoney.add(wamount,0,1);
+         
+        TextField wamountBox = new TextField();
+        withdrawMoney.add(wamountBox, 1,1);
+        
+        Button wsub = new Button("Submit");
+        HBox hwsub = new HBox(5);
+        hwsub.setAlignment(Pos.CENTER);
+        hwsub.getChildren().add(wsub);
+        withdrawMoney.add(wsub, 1, 4);
+        
+        final Text withdrawn = new Text();
+        withdrawMoney.add(withdrawn,1,6);
+        
+        Button getbck = new Button("Back");
+        HBox hgetbck = new HBox(5);
+        hgetbck.setAlignment(Pos.BASELINE_LEFT);
+        hgetbck.getChildren().add(getbck);
+        withdrawMoney.add(getbck,0,6);  
+
+        withdrawMoney.setStyle(style);
+        Scene scene422 = new Scene(withdrawMoney,600,500); 
+        
+        wsub.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+              double nummoney = Double.parseDouble(wamountBox.getText());
+              customer.withdrawMoney(nummoney);
+              withdrawn.setFill(Color.ALICEBLUE);
+              withdrawn.setText("Successfully withdrawn:  $" + nummoney);
+              wamountBox.clear();
+            }  
+        
+        });
+        
+        // End of Scene 422
+        // Scene 423: Online Purchase 
+        GridPane onlinep = new GridPane();
+        onlinep.setAlignment(Pos.CENTER);
+        onlinep.setHgap(10);
+        onlinep.setVgap(10);
+        onlinep.setPadding(new Insets(5, 5, 5, 5));
+
+        Text Titleop = new Text("My Account:Online Purchase_________________________");
+        Titleop.setFont(Font.font("Calibri", FontWeight.NORMAL, 20));
+        Titleop.setFill(Color.ALICEBLUE);
+        onlinep.add(Titleop,0, 0, 3, 1);
+ 
+        Label opamount = new Label("Enter Amount:");
+        opamount.setTextFill(Color.web("#ffffff"));
+        onlinep.add(opamount,0,1);
+         
+        TextField opamountBox = new TextField();
+        onlinep.add(opamountBox, 1,1);
+        
+        Button opsub = new Button("Submit");
+        HBox hopsub = new HBox(5);
+        hopsub.setAlignment(Pos.CENTER);
+        hopsub.getChildren().add(opsub);
+        onlinep.add(opsub, 1, 4);
+        
+        final Text purchased = new Text();
+        onlinep.add(purchased,1,6);
+        
+        Button getbk = new Button("Back");
+        HBox hgetbk = new HBox(5);
+        hgetbk.setAlignment(Pos.BASELINE_LEFT);
+        hgetbk.getChildren().add(getbk);
+        onlinep.add(getbk,0,7); 
+        
+        onlinep.setStyle(style);
+        Scene scene423 = new Scene(onlinep,500,500); 
+        opsub.setOnAction(new EventHandler<ActionEvent>(){
+
+            @Override
+            public void handle(ActionEvent event) {
+                double Total;
+                double onnum = Double.parseDouble(opamountBox.getText());
+                    if(onnum < 50){
+                       purchased.setFill(Color.ALICEBLUE);
+                       purchased.setText("Sorry request cannot be processed,the online purchase must be of 50 dollars or more");
+                       opamountBox.clear();
+                        }else{
+                        if(customer.getBalance() < 10000){
+                            Total = onnum + 20;
+                            customer.UpdateBalance(Total);
+                             purchased.setFill(Color.ALICEBLUE);
+                             purchased.setText("Transaction successful!!");
+                             opamountBox.clear();
+                        }
+                        if(customer.getBalance()> 10000 && customer.getBalance()< 20000){
+                             Total = onnum + 10;
+                            customer.UpdateBalance(Total);
+                             purchased.setFill(Color.ALICEBLUE);
+                             purchased.setText("Transaction successful!!");
+                             opamountBox.clear();
+                        }
+          
+                        if(customer.getBalance()> 20000){
+                               Total = onnum;
+                              customer.UpdateBalance(Total);
+                               purchased.setFill(Color.ALICEBLUE);
+                               purchased.setText("Transaction successful!!");
+                               opamountBox.clear();
+                        }
+                    
+                       }}
+            
+        });
+        
+        
+        // End of Scene 423
+        
+        
+        // Scene 32
+        // This is the scene for customer after login to choose deposit, withdraw,make online purchase and get balance 
+
+        GridPane customerscreen = new GridPane();
+        customerscreen.setAlignment(Pos.CENTER);
+        customerscreen.setHgap(10);
+        customerscreen.setVgap(10);
+        customerscreen.setPadding(new Insets(25, 25, 25, 25));
+
+        Text scene32title = new Text("My Account");
+        scene32title.setFont(Font.font("Calibri", FontWeight.NORMAL, 20));
+        scene32title.setFill(Color.ALICEBLUE);
+        customerscreen.add(scene32title, 0, 0, 2, 1);
+        
+        Button dm = new Button("Deposit Money");
+        VBox hbBtndm = new VBox(10);              // 
+        hbBtndm.setAlignment(Pos.CENTER);
+        hbBtndm.getChildren().add(dm);
+        customerscreen.add(hbBtndm, 1, 1);
+        
+        Button w = new Button("Withdraw");
+        VBox hbBtnw = new VBox(10);
+        hbBtnw.setAlignment(Pos.CENTER);
+        hbBtnw.getChildren().add(w);
+        customerscreen.add(hbBtnw, 1, 2); //colmn = 1 row =2 
+
+        Button op = new Button("Online Purchase");
+        VBox hbBtnop = new VBox(10);
+        hbBtnop.setAlignment(Pos.CENTER);
+        hbBtnop.getChildren().add(op);
+        customerscreen.add(hbBtnop, 1, 3); //colmn = 1 row =3
+
+        Button cb = new Button("Check Balance");
+        VBox hbBtncb = new VBox(10);
+        hbBtncb.setAlignment(Pos.CENTER);
+        hbBtncb.getChildren().add(cb);
+        customerscreen.add(hbBtncb, 1, 4); //colmn = 1 row =3
+
+        Button loc = new Button("Sign out");
+        VBox hbBtnloc = new VBox(10);
+        hbBtnloc.setAlignment(Pos.BASELINE_RIGHT);
+        hbBtnloc.getChildren().add(loc);
+        customerscreen.add(hbBtnloc, 1, 5);  //colmn = 1 row =5
+        
+        customerscreen.setStyle(style);
+        Scene scene32 = new Scene(customerscreen,300,275);    
+        dm.setOnAction(e-> primaryStage.setScene(scene421));
+        w.setOnAction(e-> primaryStage.setScene(scene422));
+        op.setOnAction(e-> primaryStage.setScene(scene423));
+        loc.setOnAction(e->primaryStage.setScene(scene1));
+        getback.setOnAction(e-> primaryStage.setScene(scene32));
+        getbck.setOnAction(e-> primaryStage.setScene(scene32));
+        getbk.setOnAction(e-> primaryStage.setScene(scene32));
+        cb.setOnAction(new EventHandler<ActionEvent>(){
+
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Your current balance is:" + customer.getBalance());
+            }
+                         
+        });
+        // end of scene 32  
+              
+        //Scene22  login page for Customers 
+        //Scene(Parent root, double width, double height) Creates a scene for a specific root Node with a specific size.
+        
+        GridPane grid22 = new GridPane();
+        grid22.setAlignment(Pos.CENTER);
+        grid22.setHgap(10);
+        grid22.setVgap(10);
+        grid22.setPadding(new Insets(25, 25, 25, 25));
+        
+        Text scene22title = new Text("JJ Online Bank"); 
+        scene22title.setFont(Font.font("Calibri", FontWeight.NORMAL, 20));
+        scene22title.setFill(Color.ALICEBLUE);
+        grid22.add(scene22title, 0, 0, 2, 1);
+
+        Label customerName = new Label("User Name: ");
+        customerName.setTextFill(Color.web("#ffffff"));
+        grid22.add(customerName, 0, 1);
+        
+        TextField customerTextFeild = new TextField();
+        grid22.add(customerTextFeild, 1, 1);
+        
+        Label cspw = new Label("Password:");
+        cspw.setTextFill(Color.web("#ffffff"));
+        grid22.add(cspw, 0, 2);
+        
+        PasswordField cspwBox = new PasswordField();
+        grid22.add(cspwBox, 1, 2);
+        
+        Button btns2 = new Button("Sign in");
+        HBox hbBtns2 = new HBox(10);
+        hbBtns2.setAlignment(Pos.BOTTOM_CENTER);
+        hbBtns2.getChildren().add(btns2);
+        grid22.add(hbBtns2, 1, 4);
+        
+        Button back = new Button("Back");
+        HBox hback = new HBox(5);
+        hback.setAlignment(Pos.BASELINE_LEFT);
+        hback.getChildren().add(back);
+        grid22.add(hback, 0, 7);
+        
+        final Text wrong = new Text();
+        grid22.add(wrong,1,5);
+
+        btns2.setOnAction(new EventHandler<ActionEvent>(){
+
+            @Override
+            public void handle(ActionEvent event) {
+                for(int m = 0; m < file.size(); m++){
+                    if(customerTextFeild.getText().equals(file.get(m).c.username)){
+                        if(cspwBox.getText().equals(file.get(m).c.password)){
+                            btns2.setOnAction(e-> primaryStage.setScene(scene32));
+                            customerTextFeild.clear();
+                            cspwBox.clear();
+                        }else{
+                            wrong.setFill(Color.ALICEBLUE);
+                            wrong.setText("Username or Password incorrect, please try again!");
+                            customerTextFeild.clear();
+                            cspwBox.clear();
+                        }
+                         
+                    }
+                }
+            }
+            
+        });
+        
+        grid22.setStyle(style);
+        Scene scene22 = new Scene(grid22,300,275);
+        c.setOnAction(e-> primaryStage.setScene(scene22)); /// Copy paste scene22
+        back.setOnAction(e-> primaryStage.setScene(scene1));
+        
+        final Text message = new Text();
+        grid22.add(message, 1, 6);
+        primaryStage.show();
+        
+    }
+    
+    public static void main(String[] args) {
+        Application.launch(args);
+    }
+}
